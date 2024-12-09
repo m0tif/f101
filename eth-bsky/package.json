@@ -1,0 +1,25 @@
+{
+  "name": "eth-bsky",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ../node.js eth-bsky",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "Apache-2.0 OR MIT",
+  "description": "",
+  "dependencies": {
+    "@metamask/eth-sig-util": "^8.1.1",
+    "ethers": "^6.13.4",
+    "express-flare": "^1.4.27"
+  },
+  "devDependencies": {
+    "express": "^4.21.2",
+    "dotenv": "^16.4.7",
+    "buffer": "^6.0.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^5.1.4"
+  }
+}
