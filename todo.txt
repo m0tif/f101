@@ -1,0 +1,5 @@
+@bunn.moe
+
+i have an idea for symmetric encryption with cloudflare workers, i'll link it in a bit, should be kinda neat
+
+
