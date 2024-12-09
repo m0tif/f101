@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node ../node.js worker-test",
+    "start": "sh -c \"node ../node.js $(pwd)\"",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

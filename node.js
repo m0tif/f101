@@ -1,7 +1,10 @@
 const path = require("path");
 const express = require("express");
 
-const worker_dir = path.join(__dirname, process.argv[2]);
+const input = process.argv[2];
+const worker_dir = path.isAbsolute(input)
+  ? input
+  : path.join(__dirname, process.argv[2]);
 require("dotenv").config({
   path: path.join(worker_dir, ".env"),
 });
