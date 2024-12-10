@@ -1,4 +1,4 @@
-module.exports = (app, { LOCAL, ADDR_DID_MAP, resolve_ens, load_ens_name }) => {
+export default (app, { LOCAL, ADDR_DID_MAP, resolve_ens, load_ens_name }) => {
   // Route handler for .well-known/atproto-did
   app.get("/.well-known/atproto-did", async (req, res) => {
     res.setHeader("access-control-allow-origin", "*");
@@ -17,6 +17,7 @@ module.exports = (app, { LOCAL, ADDR_DID_MAP, resolve_ens, load_ens_name }) => {
       if (LOCAL) {
         did = ADDR_DID_MAP[resolved_addr];
       } else {
+        const { eth_bsky } = req.env;
         did = await eth_bsky.get(resolved_addr);
       }
       if (!did) {

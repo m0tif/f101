@@ -5,6 +5,7 @@ const input = process.argv[2];
 const worker_dir = path.isAbsolute(input)
   ? input
   : path.join(__dirname, process.argv[2]);
+
 require("dotenv").config({
   path: path.join(worker_dir, ".env"),
 });
@@ -18,4 +19,4 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-require(path.join(worker_dir, "index.js"))(app);
+import(path.join(worker_dir, "index.mjs")).then((v) => v.default(app));

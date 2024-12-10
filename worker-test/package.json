@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "sh -c \"node ../node.js $(pwd)\"",
-    "build": "webpack",
+    "build": "node ./build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -16,8 +16,7 @@
   "devDependencies": {
     "buffer": "^6.0.3",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "webpack": "^5.97.1",
-    "webpack-cli": "^5.1.4"
+    "esbuild": "^0.24.0",
+    "express": "^4.21.2"
   }
 }

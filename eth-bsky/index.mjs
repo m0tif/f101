@@ -1,6 +1,7 @@
-const { ethers } = require("ethers");
+import { ethers } from "ethers";
 
-const RPC_URL = process.env.RPC_URL;
+const { RPC_URL, WEBWORKER, SERVER_URL } =
+  typeof process === "object" ? process.env : CONFIG;
 if (!RPC_URL) {
   throw new Error("RPC_URL env var is required");
 }
@@ -29,21 +30,25 @@ const domains = [
 const state = {
   // map address strings to did strings
   ADDR_DID_MAP: {},
-  LOCAL: !process.env.WEBWORKER,
+  LOCAL: !WEBWORKER,
   domains,
   load_ens_name,
   RPC_URL,
-  URL: process.env.URL || "http://localhost:3000",
+  URL: SERVER_URL || "http://localhost:3000",
   eth_rpc_req,
   chainId: eth_rpc_req("eth_chainId", []).then((v) => Number(v)),
   resolve_ens,
 };
 
-module.exports = (app) => {
-  require("./src/index.js")(app, state);
-  require("./src/get_did.js")(app, state);
-  require("./src/set_did.js")(app, state);
-  require("./src/resolve_ens.js")(app, state);
+export default async (app) => {
+  (
+    await Promise.all([
+      import("./src/index.mjs"),
+      import("./src/get_did.mjs"),
+      import("./src/set_did.mjs"),
+      import("./src/resolve_ens.mjs"),
+    ])
+  ).map((v) => v.default(app, state));
 };
 
 function load_ens_name(req) {

@@ -1,4 +1,4 @@
-module.exports = (app, state) => {
+export default (app, state) => {
   app.get("/hello_world", (req, res) => {
     res.setHeader("access-control-allow-origin", "*");
     res.setHeader("content-type", "text/html");

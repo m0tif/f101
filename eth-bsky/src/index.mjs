@@ -1,8 +1,9 @@
-module.exports = (
+export default (
   app,
   { LOCAL, ADDR_DID_MAP, URL: _URL, resolve_ens, load_ens_name, domains },
 ) => {
   app.get("/", async (req, res) => {
+    const { eth_bsky } = req.env;
     res.setHeader("access-control-allow-origin", "*");
     res.setHeader("content-type", "text/html");
     let ens_name = load_ens_name(req);

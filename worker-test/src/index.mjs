@@ -1,5 +1,5 @@
 /// TODO: stick a react rendering system in here, try npmjs.com/uhtml
-module.exports = (app) => {
+export default (app) => {
   app.get("/", (req, res) => {
     res.setHeader("access-control-allow-origin", "*");
     res.setHeader("content-type", "text/html");

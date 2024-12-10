@@ -1,5 +1,5 @@
 name = "eth-bsky"
-main = "dist/worker.js"
+main = "dist/worker.mjs"
 compatibility_date = "2023-01-01"
 
 [[kv_namespaces]]
