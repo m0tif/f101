@@ -5,6 +5,9 @@ require("dotenv").config();
 esbuild
   .build({
     entryPoints: [path.join(__dirname, "../webworker.mjs")],
+    alias: {
+      entry_module: path.join(__dirname, "index.mjs"),
+    },
     bundle: true,
     outfile: "dist/worker.mjs",
     format: "esm",
@@ -20,9 +23,6 @@ esbuild
         },
       }),
       "global.Buffer": "Buffer",
-    },
-    alias: {
-      entry_module: path.join(__dirname, "index.mjs"),
     },
     external: [
       "fs",
