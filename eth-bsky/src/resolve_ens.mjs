@@ -1,4 +1,4 @@
-export default (app, { eth_rpc_req, resolve_ens }) => {
+export default (app, { resolve_ens }) => {
   // Route handler for .well-known/atproto-did
   app.get("/resolve_ens", async (req, res) => {
     res.setHeader("access-control-allow-origin", "*");

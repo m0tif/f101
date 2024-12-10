@@ -1,9 +1,8 @@
 export default (
   app,
-  { LOCAL, ADDR_DID_MAP, URL: _URL, resolve_ens, load_ens_name, domains },
+  { URL: _URL, resolve_ens, load_ens_name, domains, kv_get },
 ) => {
   app.get("/", async (req, res) => {
-    const { eth_bsky } = req.env;
     res.setHeader("access-control-allow-origin", "*");
     res.setHeader("content-type", "text/html");
     let ens_name = load_ens_name(req);
@@ -23,12 +22,7 @@ export default (
           `);
         return;
       }
-      let existing;
-      if (LOCAL) {
-        existing = ADDR_DID_MAP[resolved_addr];
-      } else {
-        existing = await eth_bsky.get(resolved_addr);
-      }
+      const existing = await kv_get(req, "eth_bsky", resolved_addr);
       if (existing) {
         res.end(`
   <html>

@@ -10,9 +10,8 @@ const types = {
   DID: [{ name: "identifier", type: "string" }],
 };
 
-export default (app, { LOCAL, ADDR_DID_MAP, RPC_URL, chainId }) => {
+export default (app, { kv_put }) => {
   app.get("/set_did", async (req, res) => {
-    const { eth_bsky } = req.env;
     res.setHeader("access-control-allow-origin", "*");
     const { did, signature, ens_name } = req.query;
     const addr = recoverTypedSignature({
@@ -26,16 +25,7 @@ export default (app, { LOCAL, ADDR_DID_MAP, RPC_URL, chainId }) => {
       version: "V4",
     });
     // update the address map
-    if (LOCAL) {
-      ADDR_DID_MAP[addr] = did;
-    } else {
-      await eth_bsky.put(addr, did);
-      const value = await eth_bsky.get(addr);
-      if (value === null) {
-        res.status(404).end();
-        return;
-      }
-    }
+    await kv_put(req, "eth_bsky", addr, did);
     res.status(200).end();
   });
 };

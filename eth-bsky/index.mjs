@@ -1,7 +1,6 @@
 import { ethers } from "ethers";
 
-const { RPC_URL, WEBWORKER, SERVER_URL } =
-  typeof process === "object" ? process.env : CONFIG;
+const { RPC_URL, WEBWORKER, SERVER_URL } = process.env;
 if (!RPC_URL) {
   throw new Error("RPC_URL env var is required");
 }
@@ -28,16 +27,16 @@ const domains = [
 ];
 
 const state = {
-  // map address strings to did strings
-  ADDR_DID_MAP: {},
   LOCAL: !WEBWORKER,
-  domains,
-  load_ens_name,
   RPC_URL,
   URL: SERVER_URL || "http://localhost:3000",
+  domains,
+  load_ens_name,
   eth_rpc_req,
   chainId: eth_rpc_req("eth_chainId", []).then((v) => Number(v)),
   resolve_ens,
+  kv_put,
+  kv_get,
 };
 
 export default async (app) => {
@@ -50,6 +49,24 @@ export default async (app) => {
     ])
   ).map((v) => v.default(app, state));
 };
+
+// map address strings to did strings
+const ADDR_DID_MAP = {};
+async function kv_get(req, name, key) {
+  if (state.LOCAL) {
+    return ADDR_DID_MAP[key];
+  } else {
+    return req.env[name].get(key);
+  }
+}
+
+async function kv_put(req, name, key, val) {
+  if (state.LOCAL) {
+    ADDR_DID_MAP[key] = val;
+  } else {
+    await req.env[name].put(key, val);
+  }
+}
 
 function load_ens_name(req) {
   const url = new URL(

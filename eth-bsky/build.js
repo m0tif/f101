@@ -8,6 +8,7 @@ esbuild
     bundle: true,
     outfile: "dist/worker.mjs",
     format: "esm",
+    minify: true,
     define: {
       // DefinePlugin equivalents
       WORKER_DIR: JSON.stringify(__dirname),

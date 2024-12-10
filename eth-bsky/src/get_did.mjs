@@ -1,4 +1,4 @@
-export default (app, { LOCAL, ADDR_DID_MAP, resolve_ens, load_ens_name }) => {
+export default (app, { resolve_ens, load_ens_name, kv_get }) => {
   // Route handler for .well-known/atproto-did
   app.get("/.well-known/atproto-did", async (req, res) => {
     res.setHeader("access-control-allow-origin", "*");
@@ -13,13 +13,7 @@ export default (app, { LOCAL, ADDR_DID_MAP, resolve_ens, load_ens_name }) => {
         return;
       }
       // check a database mapping ens address to :did
-      let did;
-      if (LOCAL) {
-        did = ADDR_DID_MAP[resolved_addr];
-      } else {
-        const { eth_bsky } = req.env;
-        did = await eth_bsky.get(resolved_addr);
-      }
+      const did = await kv_get(req, "eth_bsky", resolved_addr);
       if (!did) {
         res.status(404).end(`no DID associated with address ${resolved_addr}`);
         return;
