@@ -19,4 +19,7 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-import(path.join(worker_dir, "index.mjs")).then((v) => v.default(app));
+import(path.join(__dirname, "./f101_middleware.mjs"))
+  .then(({ default: f101 }) => app.use("*", f101))
+  .then(() => import(path.join(worker_dir, "index.mjs")))
+  .then((v) => v.default(app));
