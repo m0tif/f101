@@ -2,7 +2,7 @@ import { handleRequest, router } from "express-flare";
 import f101 from "./f101_middleware.mjs";
 
 const app = router();
-app.use("*", f101);
+app.use(f101);
 
 // aliased using esbuild
 import entry from "entry_module";
