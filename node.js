@@ -14,6 +14,8 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 
+app.use(express.static(path.join(worker_dir, "public")));
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
