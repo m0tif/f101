@@ -1,7 +1,0 @@
-name = "eth-bsky"
-main = "dist/worker.mjs"
-compatibility_date = "2023-01-01"
-
-[[kv_namespaces]]
-binding = "eth_bsky"
-id = "bf2b5f2a5cf945819a00243b3e6ad74c"
