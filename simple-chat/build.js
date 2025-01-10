@@ -66,7 +66,7 @@ esbuild
   .build({
     entryPoints: [path.join(__dirname, "client/entrypoint.jsx")],
     bundle: true,
-    outfile: path.join(__dirname, "public", "bundle.js"),
+    outfile: path.join(__dirname, "assets/public", "bundle.js"),
     format: "esm",
     sourcemap: true,
     loader: {

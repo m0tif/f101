@@ -2,4 +2,4 @@ name = "react-example"
 main = "dist/worker.mjs"
 compatibility_date = "2024-09-19"
 
-assets = { directory = "./public", not_found_handling = "single-page-application" }
+assets = { directory = "./assets", not_found_handling = "single-page-application" }

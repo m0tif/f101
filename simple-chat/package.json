@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "cp -r public dist/node/public && sh -c \"node ../node.js $(pwd)/dist/node\"",
+    "start": "node build.js ; cp -r assets/public dist/node/public && sh -c \"node ../node.js $(pwd)/dist/node\"",
     "build": "NODE_ENV=production node build.js"
   },
   "author": "",
