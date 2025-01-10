@@ -1,3 +1,0 @@
-name = "zketh-freedit-redirect"
-main = "./dist/worker.mjs"
-compatibility_date = "2023-01-01"
