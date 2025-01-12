@@ -245,7 +245,7 @@ const App = () => {
               {...context}
               key={context.name}
               onStartChat={(state) => {
-                setForkedState(context.forkOf?.state);
+                setForkedState(context.forkOf?.state || []);
                 setMessages(() => [...(context.forkOf?.state || []), ...state]);
                 focusInput();
               }}
