@@ -30,6 +30,25 @@ function copyToClipboard(str) {
   document.body.removeChild(textarea);
 }
 
+const humanIdentifiers = [
+  ["👩", 20],
+  ["🙂", 10],
+  ["👨", 5],
+];
+
+const selectIdentifier = () => {
+  let range = 0;
+  const adjustedIdentifiers = humanIdentifiers.map(([char, odds]) => {
+    const out = [char, range, range + odds];
+    range += odds;
+    return out;
+  });
+  const v = Math.floor(Math.random() * range);
+  return adjustedIdentifiers.find(([, start, end]) => {
+    return v >= start && v < end;
+  })[0];
+};
+
 const Message = ({ text, role, onRemove }) => {
   const renderMarkdown = (content) => {
     const html = marked.parse(content || "");
@@ -38,7 +57,7 @@ const Message = ({ text, role, onRemove }) => {
 
   return (
     <div style={{ display: "flex" }}>
-      <div>{role === "user" ? "👩" : "🤖"}</div>
+      <div>{role === "user" ? selectIdentifier() : "🤖"}</div>
       <div
         style={{
           border: "1px solid black",
