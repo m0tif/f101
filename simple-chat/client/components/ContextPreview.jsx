@@ -1,19 +1,33 @@
 import React from "react";
 
-const ContextPreview = ({ name, labels, notes, state, onStartChat }) => {
+const ContextPreview = ({
+  name,
+  labels,
+  notes,
+  forkOf,
+  state,
+  onStartChat,
+}) => {
   return (
     <div
       style={{
         display: "flex",
-        justifyContent: "space-around",
+        justifyContent: "space-between",
         border: "1px solid black",
-        padding: "3px",
+        padding: "10px",
         margin: "2px",
         borderRadius: "5px",
       }}
     >
       <div>
-        <h4>{name}</h4>
+        <div style={{ fontWeight: "bold" }}>{name}</div>
+        <div style={{ height: "4px" }} />
+        {forkOf ? (
+          <div>
+            Fork of <span style={{ fontWeight: "bold" }}>{forkOf.name}</span>
+          </div>
+        ) : null}
+        <div style={{ height: "4px" }} />
         <button
           onClick={() => {
             if (!onStartChat) return;
@@ -23,9 +37,9 @@ const ContextPreview = ({ name, labels, notes, state, onStartChat }) => {
           start chat
         </button>
       </div>
-      <div style={{ alignSelf: "center" }}>
-        {labels.map((v) => (
-          <div key={v} style={{ fontSize: "10px" }}>
+      <div style={{ alignSelf: "right" }}>
+        {(labels || []).map((v) => (
+          <div key={v} style={{ fontSize: "10px", textAlign: "right" }}>
             {v}
           </div>
         ))}

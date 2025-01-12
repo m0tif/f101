@@ -228,15 +228,12 @@ const App = () => {
           }}
         >
           <h3>Open an existing context</h3>
-          {contexts.map(({ name, labels, notes, state }) => (
+          {contexts.map((context) => (
             <ContextPreview
-              key={name}
-              name={name}
-              labels={labels}
-              notes={notes}
-              state={state}
+              {...context}
+              key={context.name}
               onStartChat={(state) => {
-                setMessages(() => state);
+                setMessages(() => [...(context.forkOf?.state || []), ...state]);
                 focusInput();
               }}
             />
