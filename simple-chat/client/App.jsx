@@ -4,6 +4,10 @@ import contexts from "./contexts.js";
 import ContextPreview from "./components/ContextPreview.jsx";
 
 const App = () => {
+  const [forkedState, setForkedState] = React.useState([]);
+  const [showForkHistory, setShowForkHistory] = React.useState(false);
+  // we're slice this array in the render function but leave it as
+  // is here so that exports/imports work as expected
   const [messages, setMessages] = React.useState([]);
   const [currentMessage, setCurrentMessage] = React.useState("");
   const [serverUrl, setServerUrl] = React.useState(
@@ -204,20 +208,28 @@ const App = () => {
             flex: "1",
           }}
         >
-          {[...messages].reverse().map((message, index) => {
-            return (
-              <Message
-                key={`${index}-${message}`}
-                onRemove={() => {
-                  setMessages((old) =>
-                    old.filter((_, i) => i !== messages.length - 1 - index),
-                  );
-                }}
-                role={message.role}
-                text={message.content}
-              />
-            );
-          })}
+          {[...messages]
+            .slice(showForkHistory ? 0 : forkedState.length)
+            .reverse()
+            .map((message, index) => {
+              return (
+                <Message
+                  key={`${index}-${message}`}
+                  onRemove={() => {
+                    setMessages((old) =>
+                      old.filter((_, i) => i !== messages.length - 1 - index),
+                    );
+                  }}
+                  role={message.role}
+                  text={message.content}
+                />
+              );
+            })}
+          {forkedState.length && !showForkHistory ? (
+            <button onClick={() => setShowForkHistory(true)}>
+              Show fork history
+            </button>
+          ) : null}
         </div>
         <div
           style={{
@@ -233,6 +245,7 @@ const App = () => {
               {...context}
               key={context.name}
               onStartChat={(state) => {
+                setForkedState(context.forkOf?.state);
                 setMessages(() => [...(context.forkOf?.state || []), ...state]);
                 focusInput();
               }}
