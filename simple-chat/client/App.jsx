@@ -26,14 +26,33 @@ const App = () => {
     }
   };
 
+  const loadForkHistory = (context) => {
+    const forkHistory = [];
+    let fork = context.forkOf;
+    while (fork) {
+      forkHistory.unshift(...fork.state);
+      fork = fork.forkOf;
+    }
+    return forkHistory;
+  };
+
   // Focus effect when awaitingResponse changes to false
   React.useEffect(focusInput, [awaitingResponse]);
 
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const v = urlParams.get("prompt_url");
-    if (v) {
-      setServerUrl(v);
+    const prompt_url = urlParams.get("prompt_url");
+    if (prompt_url) {
+      setServerUrl(prompt_url);
+    }
+    const goto_chat = urlParams.get("goto_chat");
+    if (goto_chat) {
+      const context = contexts.find(({ name }) => name === goto_chat);
+      if (!context) return;
+      const forkHistory = loadForkHistory(context);
+      setForkedState(() => forkHistory);
+      setMessages(() => [...forkHistory, ...context.state]);
+      focusInput();
     }
   }, []);
 
@@ -245,8 +264,9 @@ const App = () => {
               {...context}
               key={context.name}
               onStartChat={(state) => {
-                setForkedState(context.forkOf?.state || []);
-                setMessages(() => [...(context.forkOf?.state || []), ...state]);
+                const forkHistory = loadForkHistory(context);
+                setForkedState(() => forkHistory);
+                setMessages(() => [...forkHistory, ...state]);
                 focusInput();
               }}
             />
