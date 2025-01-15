@@ -228,12 +228,14 @@ const App = () => {
           }}
         >
           {[...messages]
+            .map((message, index) => ({ ...message, index }))
             .slice(showForkHistory ? 0 : forkedState.length)
             .reverse()
             .map((message, index) => {
               return (
                 <Message
                   key={`${index}-${message}`}
+                  conversationIndex={message.index}
                   onRemove={() => {
                     setMessages((old) =>
                       old.filter((_, i) => i !== messages.length - 1 - index),

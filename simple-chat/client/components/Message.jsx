@@ -49,7 +49,7 @@ const selectIdentifier = () => {
   })[0];
 };
 
-const Message = ({ text, role, onRemove }) => {
+const Message = ({ text, role, onRemove, conversationIndex }) => {
   const renderMarkdown = (content) => {
     const html = marked.parse(content || "");
     return { __html: html };
@@ -67,8 +67,12 @@ const Message = ({ text, role, onRemove }) => {
           maxWidth: "800px",
         }}
       >
-        <button onClick={onRemove}>Remove</button>
-        <button onClick={() => copyToClipboard(text)}>Copy</button>
+        <div style={{ display: "flex" }}>
+          <button onClick={onRemove}>Remove</button>
+          <button onClick={() => copyToClipboard(text)}>Copy</button>
+          <div style={{ flex: 1 }} />
+          <div>{conversationIndex}</div>
+        </div>
         <div
           style={{ overflow: "scroll" }}
           dangerouslySetInnerHTML={renderMarkdown(text)}
