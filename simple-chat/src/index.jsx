@@ -14,7 +14,7 @@ export default (app) => {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="/public/bundle.js" defer></script>
-        <title>SSR React App</title>
+        <title>Mote ai</title>
       </head>
       <body>
         <div id="root">${html}</div>
