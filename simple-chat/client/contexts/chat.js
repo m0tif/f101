@@ -1,5 +1,25 @@
 import { createContext } from "react";
 import { makeAutoObservable } from "mobx";
+import contexts from "../contexts";
+
+const humanIdentifiers = [
+  ["👩", 20],
+  ["🙂", 10],
+  ["👨", 5],
+];
+
+const selectIdentifier = () => {
+  let range = 0;
+  const adjustedIdentifiers = humanIdentifiers.map(([char, odds]) => {
+    const out = [char, range, range + odds];
+    range += odds;
+    return out;
+  });
+  const v = Math.floor(Math.random() * range);
+  return adjustedIdentifiers.find(([, start, end]) => {
+    return v >= start && v < end;
+  })[0];
+};
 
 export default class Chat {
   url = "";
@@ -11,6 +31,7 @@ export default class Chat {
   forkedState = [];
   currentMessage = "";
   awaitingResponse = false;
+  humanIdentifier = selectIdentifier();
 
   constructor(state, requestUrl) {
     makeAutoObservable(this);
@@ -30,10 +51,18 @@ export default class Chat {
   load() {
     const urlParams = new URLSearchParams(window.location.search);
     const prompt_url = urlParams.get("prompt_url");
+    const goto_chat = urlParams.get("goto_chat");
     if (prompt_url) {
       this.url = prompt_url;
     } else {
       this.url = "https://worker-inference.jchancehud.workers.dev/prompt";
+    }
+    if (goto_chat) {
+      const context = contexts.find(({ name }) => name === goto_chat);
+      if (!context) return;
+      const forkHistory = this.loadForkHistory(context);
+      this.setForkedState(forkHistory);
+      this.setMessages([...forkHistory, ...context.state]);
     }
   }
 
@@ -73,6 +102,16 @@ export default class Chat {
       console.log(e);
       this.setAwaitingResponse(false);
     }
+  }
+
+  loadForkHistory(context) {
+    const forkHistory = [];
+    let fork = context.forkOf;
+    while (fork) {
+      forkHistory.unshift(...fork.state);
+      fork = fork.forkOf;
+    }
+    return forkHistory;
   }
 
   setUrl(prompt_url) {

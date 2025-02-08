@@ -1,5 +1,6 @@
 import React from "react";
 import { marked } from "marked";
+import state from "../contexts/state.js";
 
 function copyToClipboard(str) {
   // Create a new textarea element
@@ -30,26 +31,9 @@ function copyToClipboard(str) {
   document.body.removeChild(textarea);
 }
 
-const humanIdentifiers = [
-  ["👩", 20],
-  ["🙂", 10],
-  ["👨", 5],
-];
-
-const selectIdentifier = () => {
-  let range = 0;
-  const adjustedIdentifiers = humanIdentifiers.map(([char, odds]) => {
-    const out = [char, range, range + odds];
-    range += odds;
-    return out;
-  });
-  const v = Math.floor(Math.random() * range);
-  return adjustedIdentifiers.find(([, start, end]) => {
-    return v >= start && v < end;
-  })[0];
-};
-
 const Message = ({ text, role, onRemove, conversationIndex }) => {
+  const { chat } = React.useContext(state);
+
   const renderMarkdown = (content) => {
     const html = marked.parse(content || "");
     return { __html: html };
@@ -57,7 +41,7 @@ const Message = ({ text, role, onRemove, conversationIndex }) => {
 
   return (
     <div style={{ display: "flex" }}>
-      <div>{role === "user" ? selectIdentifier() : "🤖"}</div>
+      <div>{role === "user" ? chat.humanIdentifier : "🤖"}</div>
       <div
         style={{
           border: "1px solid black",
